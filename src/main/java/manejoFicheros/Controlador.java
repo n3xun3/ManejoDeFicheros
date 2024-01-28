@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import java.util.InputMismatchException;
 
 public class Controlador {
     private final Vista vista;
@@ -49,20 +50,35 @@ public class Controlador {
     }
 
     private void agregarArticulo() {
-        int id = vista.ingresarIdArticulo();
-        String nombre = vista.ingresarNombre();
-        String descripcion = vista.ingresarDescripcion();
-        int stock = vista.ingresarStock();
-        double precio = vista.ingresarPrecio();
+        try {
+            int id = vista.ingresarIdArticulo();
 
-        Modelo nuevoArticulo = new Modelo(id, nombre, descripcion, stock, precio);
+            // Verificar si el artículo ya existe en el modelo
+            Modelo articuloExistente = modelo.consultarArticulo(id);
+            if (articuloExistente != null) {
+                System.out.println("Error al agregar el artículo. ¡El ID ya existe!");
+                return; // Salir del método si el artículo ya existe
+            }
 
-        if (modelo.agregarArticulo(nuevoArticulo)) {
-        	System.out.println("Artículo agregado correctamente.");
-        } else {
-        	System.out.println("Error al agregar el artículo. ¡El ID ya existe!");
+            String nombre = vista.ingresarNombre();
+            String descripcion = vista.ingresarDescripcion();
+            int stock = vista.ingresarStock();
+            double precio = vista.ingresarPrecio();
+
+            Modelo nuevoArticulo = new Modelo(id, nombre, descripcion, stock, precio);
+
+            if (modelo.agregarArticulo(nuevoArticulo)) {
+                System.out.println("Artículo agregado correctamente.");
+            } else {
+                System.out.println("Error al agregar el artículo.");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Debes ingresar un número válido.");
+            // Limpiar el buffer del scanner para evitar un bucle infinito
+            vista.limpiarBuffer();
         }
     }
+
 
     private void borrarArticulo() {
         int id = vista.ingresarIdArticulo();

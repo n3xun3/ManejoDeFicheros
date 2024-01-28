@@ -63,5 +63,9 @@ public class Vista {
             System.out.println("ID: " + articulo.getId() + ", Nombre: " + articulo.getNombre() + ", Descripción: " + articulo.getDescripcion());
         }
     }
+
+    public void limpiarBuffer() {
+        scanner.nextLine(); // Leer y descartar la entrada actual del scanner
+    }
 }
     
