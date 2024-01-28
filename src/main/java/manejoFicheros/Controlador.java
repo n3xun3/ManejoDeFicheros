@@ -1,16 +1,14 @@
 package manejoFicheros;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.io.FileWriter;
 import java.io.IOException;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
 public class Controlador {
-    private Vista vista;
-    private Modelo modelo;
-    private Scanner scanner;
+    private final Vista vista;
+    private final Modelo modelo;
 
 
     public Controlador(Vista vista, Modelo modelo) {
@@ -43,15 +41,15 @@ public class Controlador {
                     break;
                 case 6 :
                 	terminarPrograma();
+                    break;
                 default:
                 	System.out.println("Opción no válida. Inténtalo de nuevo.");
             }
-        } while (opcion != 5);
+        } while (opcion != 6);
     }
 
     private void agregarArticulo() {
-        System.out.print("Ingrese el ID del artículo: ");
-        int id = scanner.nextInt();
+        int id = vista.ingresarIdArticulo();
         String nombre = vista.ingresarNombre();
         String descripcion = vista.ingresarDescripcion();
         int stock = vista.ingresarStock();
@@ -67,8 +65,7 @@ public class Controlador {
     }
 
     private void borrarArticulo() {
-    	System.out.print("Ingrese el ID del artículo: ");
-        int id = scanner.nextInt();
+        int id = vista.ingresarIdArticulo();
         if (modelo.borrarArticulo(id)) {
         	System.out.println("Artículo borrado correctamente.");
         } else {
@@ -77,8 +74,7 @@ public class Controlador {
     }
 
     private void consultarArticulo() {
-    	System.out.print("Ingrese el ID del artículo: ");
-        int id = scanner.nextInt();
+        int id = vista.ingresarIdArticulo();
         Modelo articulo = modelo.consultarArticulo(id);
         if (articulo != null) {
             vista.mostrarArticulo(articulo);
@@ -94,11 +90,12 @@ public class Controlador {
 
     private void terminarPrograma() {
     	System.out.println("Finalizando programa...");
-        scanner.close();
     }
-    
+
     public void exportarArticulosCSV() {
-        try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter("articulos.csv"), CSVFormat.DEFAULT)) {
+        try {
+            CSVPrinter csvPrinter = new CSVPrinter(new FileWriter("articulos.csv"), CSVFormat.DEFAULT);
+
             // Escribir encabezados
             csvPrinter.printRecord("ID", "Nombre", "Descripción", "Stock", "Precio");
 
@@ -111,10 +108,14 @@ public class Controlador {
                         articulo.getStock(), articulo.getPrecio());
             }
 
+            // Cerrar el CSVPrinter para finalizar la escritura
+            csvPrinter.close();
+
             System.out.println("Los artículos se han exportado correctamente a 'articulos.csv'.");
         } catch (IOException e) {
-        	System.out.println("Error al exportar los artículos a archivo CSV: " + e.getMessage());
+            System.out.println("Error al exportar los artículos a archivo CSV: " + e.getMessage());
         }
     }
+
 }
 

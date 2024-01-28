@@ -22,6 +22,11 @@ public class Vista {
         return scanner.nextInt();
     }
 
+    public int ingresarIdArticulo() {
+        System.out.print("Ingrese el ID del artículo: ");
+        return scanner.nextInt();
+    }
+
     public String ingresarNombre() {
         System.out.print("Ingrese el nombre del artículo: ");
         scanner.nextLine(); // Limpiar el buffer del scanner
