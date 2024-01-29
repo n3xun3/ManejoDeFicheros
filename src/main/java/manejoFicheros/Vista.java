@@ -68,4 +68,3 @@ public class Vista {
         scanner.nextLine(); // Leer y descartar la entrada actual del scanner
     }
 }
-    
