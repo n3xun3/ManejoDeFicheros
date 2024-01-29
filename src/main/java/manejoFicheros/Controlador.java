@@ -7,16 +7,25 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import java.util.InputMismatchException;
 
+/**
+ * La clase Controlador es responsable de controlar la lógica de negocio y la interacción entre la vista y el modelo.
+ */
 public class Controlador {
     private final Vista vista;
     private final Modelo modelo;
 
-
+    /**
+     * Constructor para la clase Controlador.
+     * @param vista La vista asociada al controlador.
+     * @param modelo El modelo asociado al controlador.
+     */
     public Controlador(Vista vista, Modelo modelo) {
         this.vista = vista;
         this.modelo = modelo;
     }
-
+    /**
+     * Método para iniciar el programa y mostrar el menú principal.
+     */
     public void iniciar() {
         int opcion;
 
@@ -49,6 +58,7 @@ public class Controlador {
         } while (opcion != 6);
     }
 
+    // Métodos privados para realizar las operaciones del menú
     private void agregarArticulo() {
         try {
             int id = vista.ingresarIdArticulo();
@@ -108,6 +118,9 @@ public class Controlador {
     	System.out.println("Finalizando programa...");
     }
 
+    /**
+     * Método para exportar los artículos a un archivo CSV.
+     */
     public void exportarArticulosCSV() {
         try {
             CSVPrinter csvPrinter = new CSVPrinter(new FileWriter("articulos.csv"), CSVFormat.DEFAULT);
